@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Farcaster Frame</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@latest/dist/web3.min.js"></script>
+</head>
+<body>
+    <h1>Farcaster Lottery DApp</h1>
+    <button onclick="enterLottery()">Enter Lottery</button>
+
+    <script>
+        const contractAddress = 'YOUR_CONTRACT_ADDRESS';
+        const abi = [/* YOUR_CONTRACT_ABI */];
+
+        async function enterLottery() {
+            if (window.ethereum) {
+                const web3 = new Web3(window.ethereum);
+                await window.ethereum.enable();
+
+                const lotteryContract = new web3.eth.Contract(abi, contractAddress);
+                const accounts = await web3.eth.getAccounts();
+
+                lotteryContract.methods.enter().send({ from: accounts[0], value: web3.utils.toWei('0.01', 'ether') })
+                .then(receipt => {
+                    console.log('Entered Lottery!', receipt);
+                })
+                .catch(error => {
+                    console.error('Error entering lottery', error);
+                });
+            } else {
+                console.error('Ethereum browser extension not detected');
+            }
+        }
+    </script>
+</body>
+</html>
